@@ -5,7 +5,7 @@
 # Stages: builder (deps only, cached) -> runtime (slim, non-root) -> {api, worker}.
 
 # ---- builder: resolve + install locked deps into /app/.venv ----------------
-FROM python:3.12-slim-bookworm AS builder
+FROM python:3.14-slim-bookworm AS builder
 
 # uv binary from the pinned official image (no curl|sh).
 COPY --from=ghcr.io/astral-sh/uv:0.10.2 /uv /bin/uv
@@ -24,7 +24,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-install-project
 
 # ---- runtime: slim base shared by every service image ----------------------
-FROM python:3.12-slim-bookworm AS runtime
+FROM python:3.14-slim-bookworm AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
