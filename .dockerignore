@@ -1,0 +1,17 @@
+# Keep the build context tiny: only pyproject.toml, uv.lock and src/ are needed.
+# Start by excluding everything, then re-include the few inputs the build uses.
+*
+
+!pyproject.toml
+!uv.lock
+!src/
+
+# Never ship caches / VCS / local env even if a rule above re-includes a parent.
+**/__pycache__/
+**/*.py[cod]
+.git/
+.venv/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.env
