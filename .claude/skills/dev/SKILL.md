@@ -65,6 +65,8 @@ API health surface (k8s-style; see src/api/routes/health.py):
 - **Config:** all settings go through `src/config.py` (pydantic-settings,
   env-driven) and must be mirrored in `.env.example`. No `os.environ` reads
   scattered in code.
+- **Branching:** trunk-based — commit straight to `main`, no feature branches.
+  `main` is the only branch.
 - **Commits:** Conventional Commits (`feat:`, `fix:`, `build:`, `ci:`, `docs:`,
   `chore:`), imperative subject, a body explaining *why* for non-trivial changes.
 - **Errors that gate health/readiness must fail closed** (return a falsy/503),
