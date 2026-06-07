@@ -1,6 +1,6 @@
 # M0 verbs. Later milestones add: migrate, dev, seed-golden, eval.
 .DEFAULT_GOAL := help
-.PHONY: help install lint format fmt-check typecheck test check audit sast security build up infra-up infra-down infra-logs clean
+.PHONY: help install lint format fmt-check typecheck test check audit sast security build up infra-up infra-down infra-logs migrate revision clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -47,6 +47,12 @@ infra-down: ## Stop all services
 
 infra-logs: ## Tail Postgres logs
 	docker compose logs -f postgres
+
+migrate: ## Apply migrations (alembic upgrade head)
+	uv run alembic upgrade head
+
+revision: ## Autogenerate a migration: make revision m="message"
+	uv run alembic revision --autogenerate -m "$(m)"
 
 clean: ## Remove tooling caches
 	rm -rf .ruff_cache .mypy_cache .pytest_cache htmlcov coverage.xml
