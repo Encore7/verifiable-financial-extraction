@@ -26,6 +26,9 @@ coverage.xml
 # Eval output (reports are committed deliberately; keep scratch out)
 reports/*.tmp
 
+# Immutable raw ELT landings (data, not source)
+data/
+
 # OS / editor
 .DS_Store
 *.swp

@@ -64,6 +64,10 @@ extend-exclude = ["alembic/versions"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC", "C4", "SIM"]
 
+[tool.ruff.lint.per-file-ignores]
+# Test assertions legitimately read landed files synchronously.
+"tests/**" = ["ASYNC240"]
+
 [tool.mypy]
 python_version = "3.12"
 mypy_path = "src"

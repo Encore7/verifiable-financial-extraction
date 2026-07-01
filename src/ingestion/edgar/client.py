@@ -62,9 +62,17 @@ class EdgarClient:
             return resp
         raise RuntimeError("unreachable")  # pragma: no cover
 
+    @staticmethod
+    def submissions_url(cik: str | int) -> str:
+        return SUBMISSIONS_URL.format(cik=int(cik))
+
+    async def get(self, url: str) -> httpx.Response:
+        """Rate-limited, retrying GET. Exposes the raw response (for ELT landing)."""
+        return await self._get(url)
+
     async def get_submissions(self, cik: str | int) -> dict[str, Any]:
         """Fetch the EDGAR submissions index for a CIK (zero-padded to 10 digits)."""
-        resp = await self._get(SUBMISSIONS_URL.format(cik=int(cik)))
+        resp = await self._get(self.submissions_url(cik))
         return resp.json()
 
     async def aclose(self) -> None:

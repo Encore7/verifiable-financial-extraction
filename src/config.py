@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # Observability: single OTLP endpoint (Grafana Alloy receiver)
     otel_exporter_otlp_endpoint: str = "http://localhost:4317"
 
+    # Filesystem root for immutable raw ELT landings.
+    landing_dir: str = "data/landings"
+
 
 @lru_cache
 def get_settings() -> Settings:
