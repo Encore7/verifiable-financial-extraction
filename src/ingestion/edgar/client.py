@@ -23,6 +23,7 @@ EDGAR_MAX_RPS = 10.0
 RETRYABLE_STATUS = frozenset({429, 500, 502, 503, 504})
 
 SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
+COMPANY_FACTS_URL = "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"
 
 
 class EdgarClient:
@@ -66,6 +67,10 @@ class EdgarClient:
     def submissions_url(cik: str | int) -> str:
         return SUBMISSIONS_URL.format(cik=int(cik))
 
+    @staticmethod
+    def company_facts_url(cik: str | int) -> str:
+        return COMPANY_FACTS_URL.format(cik=int(cik))
+
     async def get(self, url: str) -> httpx.Response:
         """Rate-limited, retrying GET. Exposes the raw response (for ELT landing)."""
         return await self._get(url)
@@ -73,6 +78,11 @@ class EdgarClient:
     async def get_submissions(self, cik: str | int) -> dict[str, Any]:
         """Fetch the EDGAR submissions index for a CIK (zero-padded to 10 digits)."""
         resp = await self._get(self.submissions_url(cik))
+        return resp.json()
+
+    async def get_company_facts(self, cik: str | int) -> dict[str, Any]:
+        """Fetch all XBRL company facts (ground truth) for a CIK."""
+        resp = await self._get(self.company_facts_url(cik))
         return resp.json()
 
     async def aclose(self) -> None:
